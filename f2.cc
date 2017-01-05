@@ -185,7 +185,7 @@ int main (int argc, char *argv[]) {
         char *src, *dst;
         struct stat statbuf;
         unordered_multimap<string, string> mymap2;
-        string file_total_name = "sorted.sam";
+        string file_total_name = "/fast_big_data/nika/sorted.sam";
 
         ofstream output_file(file_total_name, fstream::app);
 //t1=rdtsc();
