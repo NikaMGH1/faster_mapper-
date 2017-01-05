@@ -16,9 +16,10 @@
 //#define LINE_GRANULARITY hongyi num 1000000
 #define CHUNK_SIZE 1000
 
+
 using namespace std;
 //unsigned long long t1, t2;
-unordered_multimap<string, string> mymap;
+unordered_multimap<string, int> mymap;
 
 class Barcode_st {
 public:
@@ -37,13 +38,13 @@ public:
         omp_lock_t *lock_ptr;
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        void write_line(const string& key, const string& line) {
+        /*void write_line(const string& key, const string& line) {
                 mymap.insert(make_pair(key, line));
 
                 ///////////////////////
 
 
-        };
+        };*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
@@ -74,9 +75,9 @@ int find_length(const string& line, int pos) {
         return line.length() - pos;
 }
 
-unordered_multimap<string, string> process_lines(string *lines, int num_lines, map<string, Barcode_st>& barcode_map, omp_lock_t *read_locks, int num_locks, string output_dir = "./") {
+void process_lines(string *lines, int num_lines, int process_counter, map<string, Barcode_st>& barcode_map, omp_lock_t *read_locks, int num_locks, string output_dir = "./") {
         int i;
-        mymap.clear();
+
         #pragma omp parallel for private(i) schedule(dynamic, CHUNK_SIZE)
         for (i = 0; i < num_lines; i++) {
                 // get thread id
@@ -120,7 +121,8 @@ unordered_multimap<string, string> process_lines(string *lines, int num_lines, m
 
                                 // WRITE LINE
                                 omp_set_lock(lock_ptr);
-                                barcode_ptr->write_line(barcode_key, line);
+                               // barcode_ptr->write_line(barcode_key, line);
+                                mymap.insert(make_pair(barcode_key, process_counter* LINE_GRANULARITY+ i));
                                 omp_unset_lock(lock_ptr);
 
                                 omp_unset_lock(&read_locks[thread_id]);
@@ -145,7 +147,8 @@ unordered_multimap<string, string> process_lines(string *lines, int num_lines, m
                                 }
 
                                 // WRITE LINE
-                                barcode_ptr->write_line(barcode_key, line);
+                               // barcode_ptr->write_line(barcode_key, line);
+                                mymap.insert(make_pair(barcode_key, process_counter* LINE_GRANULARITY+ i));
 
                                 // release all the read locks
                                 for (int j = num_locks - 1; j >= 0; j--)
@@ -163,7 +166,8 @@ unordered_multimap<string, string> process_lines(string *lines, int num_lines, m
 
                         // WRITE LINE
                         omp_set_lock(lock_ptr);
-                        barcode_ptr->write_line(barcode_key, line);
+                       // barcode_ptr->write_line(barcode_key, line);
+                        mymap.insert(make_pair(barcode_key, process_counter* LINE_GRANULARITY+ i));
                         omp_unset_lock(lock_ptr);
 
                         omp_unset_lock(&read_locks[thread_id]);
@@ -171,7 +175,7 @@ unordered_multimap<string, string> process_lines(string *lines, int num_lines, m
 
         }
 
-        return mymap;
+        
 
 }
 
@@ -184,10 +188,10 @@ int main (int argc, char *argv[]) {
         int fdin, fdout;
         char *src, *dst;
         struct stat statbuf;
-        unordered_multimap<string, string> mymap2;
-        string file_total_name = "/fast_big_data/nika/sorted.sam";
 
-        ofstream output_file(file_total_name, fstream::app);
+
+
+
 //t1=rdtsc();
         // default output_dir
         string output_dir = "./";
@@ -205,7 +209,7 @@ int main (int argc, char *argv[]) {
         map<string, Barcode_st> barcode_map;
         // init the no_barcode entry
         barcode_map["no_barcode"].lock_ptr = new omp_lock_t;
-        barcode_map["no_barcode"].write_line("no_barcode", "");
+       // barcode_map["no_barcode"].write_line("no_barcode", "");
         omp_init_lock(barcode_map["no_barcode"].lock_ptr);
 
         int num_lines = 0;
@@ -238,12 +242,8 @@ int main (int argc, char *argv[]) {
                         num_lines--;
 
                 if (num_lines == LINE_GRANULARITY) {
-                        mymap2=process_lines(lines, num_lines, barcode_map, read_locks, num_locks, output_dir);
-                        for(auto& kv : mymap) {
+                        process_lines(lines, num_lines, process_counter, barcode_map, read_locks, num_locks, output_dir);
 
-                                output_file << kv.second.c_str() << endl;
-
-                        }
                         num_lines = 0;
                         process_counter++;
                         cout << "processed " << process_counter << "*" << LINE_GRANULARITY << " reads" << endl;
@@ -251,12 +251,8 @@ int main (int argc, char *argv[]) {
         }
 
         if (num_lines != 0) {
-                mymap2=process_lines(lines, num_lines, barcode_map, read_locks, num_locks, output_dir);
-                for(auto& kv : mymap) {
+                process_lines(lines, num_lines, process_counter, barcode_map, read_locks, num_locks, output_dir);
 
-                        output_file << kv.second.c_str() << endl;
-
-                }
                 num_lines = 0;
         }
 
@@ -268,18 +264,17 @@ int main (int argc, char *argv[]) {
         /////////////////////////////////////////////////////////////////////////
 
 
-/*string file_total_name = "sorted.sam";
-
+string file_total_name = "test.sam";
         ofstream output_file(file_total_name, fstream::app);
-
-
         for(auto& kv : mymap) {
 
-                output_file << kv.second.c_str() << endl;
+                output_file << to_string(kv.second) << endl;
 
         }
-*/
         output_file.close();
+
+        mymap.clear();
+
 /////////////////////////////////////////////////////////////////////////
         delete [] lines;
         delete [] read_locks;
