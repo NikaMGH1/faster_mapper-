@@ -74,9 +74,9 @@ int find_length(const string& line, int pos) {
         return line.length() - pos;
 }
 
-void process_lines(string *lines, int num_lines, int process_counter, map<string, Barcode_st>& barcode_map, omp_lock_t *read_locks, int num_locks, string output_dir = "./") {
+unordered_multimap<string, string> process_lines(string *lines, int num_lines, map<string, Barcode_st>& barcode_map, omp_lock_t *read_locks, int num_locks, string output_dir = "./") {
         int i;
-
+        mymap.clear();
         #pragma omp parallel for private(i) schedule(dynamic, CHUNK_SIZE)
         for (i = 0; i < num_lines; i++) {
                 // get thread id
@@ -171,16 +171,7 @@ void process_lines(string *lines, int num_lines, int process_counter, map<string
 
         }
 
-        string file_total_name = "/fast_big_data/nika/"+to_string(process_counter)+".sam";
-        ofstream output_file(file_total_name, fstream::app);
-        for(auto& kv : mymap) {
-
-                output_file << kv.second.c_str() << endl;
-
-        }
-        output_file.close();
-        
-        mymap.clear();
+        return mymap;
 
 }
 
@@ -193,10 +184,10 @@ int main (int argc, char *argv[]) {
         int fdin, fdout;
         char *src, *dst;
         struct stat statbuf;
-        
-        
+        unordered_multimap<string, string> mymap2;
+        string file_total_name = "sorted.sam";
 
-        
+        ofstream output_file(file_total_name, fstream::app);
 //t1=rdtsc();
         // default output_dir
         string output_dir = "./";
@@ -247,8 +238,12 @@ int main (int argc, char *argv[]) {
                         num_lines--;
 
                 if (num_lines == LINE_GRANULARITY) {
-                        process_lines(lines, num_lines, process_counter, barcode_map, read_locks, num_locks, output_dir);
-                        
+                        mymap2=process_lines(lines, num_lines, barcode_map, read_locks, num_locks, output_dir);
+                        for(auto& kv : mymap) {
+
+                                output_file << kv.second.c_str() << endl;
+
+                        }
                         num_lines = 0;
                         process_counter++;
                         cout << "processed " << process_counter << "*" << LINE_GRANULARITY << " reads" << endl;
@@ -256,8 +251,12 @@ int main (int argc, char *argv[]) {
         }
 
         if (num_lines != 0) {
-                process_lines(lines, num_lines, process_counter, barcode_map, read_locks, num_locks, output_dir);
-                
+                mymap2=process_lines(lines, num_lines, barcode_map, read_locks, num_locks, output_dir);
+                for(auto& kv : mymap) {
+
+                        output_file << kv.second.c_str() << endl;
+
+                }
                 num_lines = 0;
         }
 
@@ -280,7 +279,7 @@ int main (int argc, char *argv[]) {
 
         }
 */
-        
+        output_file.close();
 /////////////////////////////////////////////////////////////////////////
         delete [] lines;
         delete [] read_locks;
