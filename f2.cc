@@ -264,7 +264,7 @@ int main (int argc, char *argv[]) {
         /////////////////////////////////////////////////////////////////////////
 
 
-string file_total_name = "test.sam";
+string file_total_name = "/fast_big_data/nika/test.sam";
         ofstream output_file(file_total_name, fstream::app);
         for(auto& kv : mymap) {
 
