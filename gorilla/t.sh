@@ -1,4 +1,4 @@
-dos2unix backuptest.sh
+dos2unix t.sh
 
 gcc -std=c99 seq_2_r.c -o seq_2_r 
 
