@@ -2,14 +2,14 @@
 
 
 
-gcc-6 seq_2_r.c -o seq_2_r -lm
+gcc seq_2_r.c -o seq_2_r -lm
 
-gcc-6 seq_1_r.c -o seq_1_r -lm
-gcc-6 -fopenmp par_2_omp_r.c -o par_2_omp_r -lm
-gcc-6 -fopenmp par_1_omp_r.c -o par_1_omp_r -lm
-gcc-6 -fopenmp par_2_omp_d.c -o par_2_omp_d -lm
-gcc-6 -fopenmp par_1_omp_d.c -o par_1_omp_d -lm
-gcc-6 -fopenmp par_1_omp_memeff.c -o par_1_omp_memeff -lm
+gcc seq_1_r.c -o seq_1_r -lm
+gcc -fopenmp par_2_omp_r.c -o par_2_omp_r -lm
+gcc -fopenmp par_1_omp_r.c -o par_1_omp_r -lm
+gcc -fopenmp par_2_omp_d.c -o par_2_omp_d -lm
+gcc -fopenmp par_1_omp_d.c -o par_1_omp_d -lm
+gcc -fopenmp par_1_omp_memeff.c -o par_1_omp_memeff -lm
 
 for i in `seq 1 50`;
 do
