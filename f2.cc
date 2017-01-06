@@ -262,7 +262,7 @@ int main (int argc, char *argv[]) {
         for (int i = 0; i < num_locks; i++)
                 omp_destroy_lock(&read_locks[i]);
         /////////////////////////////////////////////////////////////////////////
-
+cout<<"let's write to file"<<endl;
 
 string file_total_name = "/fast_big_data/nika/test.sam";
         ofstream output_file(file_total_name, fstream::app);
