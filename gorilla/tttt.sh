@@ -9,7 +9,6 @@ gcc -std=c99 -fopenmp par_2_omp_r.c -o par_2_omp_r -lm
 gcc -std=c99 -fopenmp par_1_omp_r.c -o par_1_omp_r -lm
 gcc -std=c99 -fopenmp par_2_omp_d.c -o par_2_omp_d -lm
 gcc -std=c99 -fopenmp par_1_omp_d.c -o par_1_omp_d -lm
-gcc -std=c99 -fopenmp par_1_omp_memeff.c -o par_1_omp_memeff -lm
 
 for i in `seq 1 2`;
 do
