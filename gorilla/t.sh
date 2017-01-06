@@ -1,13 +1,13 @@
 #! /bin/bash
 
 
-gcc -std=c99 -L/usr/libx32 seq_2_r.c -lm -o seq_2_r 
+gcc -std=c99 seq_2_r.c -o seq_2_r 
 
-gcc -std=c99 -L/usr/libx32 seq_1_r.c -lm -o seq_1_r 
-gcc -std=c99 -L/usr/libx32 -fopenmp par_2_omp_r.c -lm -o par_2_omp_r 
-gcc -std=c99 -L/usr/libx32 -fopenmp par_1_omp_r.c -lm -o par_1_omp_r 
-gcc -std=c99 -L/usr/libx32 -fopenmp par_2_omp_d.c -lm -o par_2_omp_d 
-gcc -std=c99 -L/usr/libx32 -fopenmp par_1_omp_d.c -lm -o par_1_omp_d
+gcc -std=c99  seq_1_r.c -o seq_1_r 
+gcc -std=c99  -fopenmp par_2_omp_r.c -o par_2_omp_r 
+gcc -std=c99  -fopenmp par_1_omp_r.c -o par_1_omp_r 
+gcc -std=c99  -fopenmp par_2_omp_d.c -o par_2_omp_d 
+gcc -std=c99  -fopenmp par_1_omp_d.c -o par_1_omp_d
 
 
 for i in `seq 1 50`;
