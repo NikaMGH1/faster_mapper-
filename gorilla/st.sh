@@ -2,14 +2,14 @@
 
 
 
-gcc -std=c99 seq_2_r.c -o seq_2_r -lm
+gcc -std=c99 seq_2_r.c -o seq_2_r /usr/libx32/libm.a
 
-gcc -std=c99 seq_1_r.c -o seq_1_r -lm
-gcc -std=c99 -fopenmp par_2_omp_r.c -o par_2_omp_r -lm
-gcc -std=c99 -fopenmp par_1_omp_r.c -o par_1_omp_r -lm
-gcc -std=c99 -fopenmp par_2_omp_d.c -o par_2_omp_d -lm
-gcc -std=c99 -fopenmp par_1_omp_d.c -o par_1_omp_d -lm
-gcc -std=c99 -fopenmp par_1_omp_memeff.c -o par_1_omp_memeff -lm
+gcc -std=c99 seq_1_r.c -o seq_1_r /usr/libx32/libm.a
+gcc -std=c99 -fopenmp par_2_omp_r.c -o par_2_omp_r /usr/libx32/libm.a
+gcc -std=c99 -fopenmp par_1_omp_r.c -o par_1_omp_r /usr/libx32/libm.a
+gcc -std=c99 -fopenmp par_2_omp_d.c -o par_2_omp_d /usr/libx32/libm.a
+gcc -std=c99 -fopenmp par_1_omp_d.c -o par_1_omp_d /usr/libx32/libm.a
+
 
 for i in `seq 1 50`;
 do
