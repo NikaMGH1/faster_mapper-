@@ -1,5 +1,4 @@
-#! /bin/bash
-
+dos2unix backuptest.sh
 
 gcc -std=c99 seq_2_r.c -o seq_2_r 
 
