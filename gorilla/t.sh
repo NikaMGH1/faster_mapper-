@@ -1,5 +1,4 @@
-dos2unix t.sh
-
+#!/bin/bash
 gcc -std=c99 seq_2_r.c -o seq_2_r 
 
 gcc -std=c99  seq_1_r.c -o seq_1_r 
