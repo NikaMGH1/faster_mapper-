@@ -12,9 +12,9 @@
 #include <unordered_map>
 // #include "rdtsc.h"
 
-#define LINE_GRANULARITY 8000
-//#define LINE_GRANULARITY hongyi num 1000000
-#define CHUNK_SIZE 100
+#define LINE_GRANULARITY 800
+//#define LINE_GRANULARITY hongyi num 1000000- once worked with 10000
+#define CHUNK_SIZE 10
 
 
 using namespace std;
