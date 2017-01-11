@@ -13,7 +13,7 @@
 // #include "rdtsc.h"
 
 #define LINE_GRANULARITY 20000
-//#define LINE_GRANULARITY hongyi num 1000000- once worked with 10000/1000
+//#define LINE_GRANULARITY hongyi num 1000000- once worked with 10000/1000 - 10000/500- 20000/1000
 #define CHUNK_SIZE 1000
 
 
