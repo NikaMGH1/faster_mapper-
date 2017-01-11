@@ -2,7 +2,11 @@
 for semester project
 
 https://github.com/xhongyi/MS_internship/blob/master/split_sam/split_sam.cc
+
 g++ f2.cc -O3 --std=c++11 -fopenmp -o a.out
+
+./a.out /big_data/hxin/NA12878/NA12878_GRCh37.sam
+
 2TB SSD
 2TB HDD
 time ./a.out /big_data/hxin/NA12878/NA12878_GRCh37.sam
