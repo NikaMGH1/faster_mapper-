@@ -14,7 +14,7 @@
 
 #define LINE_GRANULARITY 10000
 //#define LINE_GRANULARITY hongyi num 1000000- once worked with 10000/1000
-#define CHUNK_SIZE 500
+#define CHUNK_SIZE 250
 
 
 using namespace std;
