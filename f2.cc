@@ -78,7 +78,7 @@ int find_length(const string& line, int pos) {
 void process_lines(string *lines, int num_lines, int process_counter, map<string, Barcode_st>& barcode_map, omp_lock_t *read_locks, int num_locks, string output_dir = "./") {
         int i;
 
-        #pragma omp parallel for private(i) schedule(dynamic, CHUNK_SIZE)
+        #pragma omp parallel for private(i) schedule(static)
         for (i = 0; i < num_lines; i++) {
                 // get thread id
                 int thread_id = omp_get_thread_num();
